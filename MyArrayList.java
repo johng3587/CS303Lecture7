@@ -213,7 +213,10 @@ public class MyArrayList<E> implements MyList<E> {
         return false;
     }
     
-    @Override /** Override iterator() defined in Iterable */
+    @Override 
+    //Override iterator() defined in Iterable 
+    //PRE: none
+    //POST return a new array list iterator
     public java.util.Iterator<E> iterator() {
         return new ArrayListIterator();
     }
