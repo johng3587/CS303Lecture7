@@ -2,6 +2,8 @@ import java.util.Collection;
 
 public interface MyList<E> extends java.util.Collection<E> {
 
+    //ABSTRACT METHODS
+
     //Abstract Method: Create a new larger array, double the current size + 1   
     public void add(int index, E e);
 
@@ -26,6 +28,7 @@ public interface MyList<E> extends java.util.Collection<E> {
     //Abstract Method: return the size of the array
     public int size();
 
+    //DEFAULT METHODS
     @Override 
     //Default Method: Return true if this list contains no elements  
     //PRE: none
@@ -65,6 +68,7 @@ public interface MyList<E> extends java.util.Collection<E> {
 
     //abstract method
     public boolean addAll(Collection<? extends E> c);
+
     /*
     //Default Method: Returns false 
     public default boolean addAll(Collection<? extends E> c){
