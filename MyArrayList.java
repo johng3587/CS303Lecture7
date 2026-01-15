@@ -26,6 +26,7 @@ public class MyArrayList<E> implements MyList<E> {
     //     add data item at the index position
     //     increase size    
     public void add(int index, E e) {
+        System.out.println("Need to write: add");
 
     }
 
@@ -122,6 +123,7 @@ public class MyArrayList<E> implements MyList<E> {
     //     Return the element that was removed from the list.  
     //     decrement size
     public E remove(int index) {
+        System.out.println("Need to write: remove");
         return null;
     }
 
@@ -133,6 +135,7 @@ public class MyArrayList<E> implements MyList<E> {
     //     sets index value to new element  
     //     returns element
     public E set(int index, E e) {
+        System.out.println("Need to write: set");
         return null;
     }
 
@@ -168,6 +171,7 @@ public class MyArrayList<E> implements MyList<E> {
     //POST: creates an array of objects, 
     //      copies elements from array to new array & returns new array
     public Object[] toArray() {
+        System.out.println("Need to write: toArray");
         return null;
     }
 
@@ -178,6 +182,7 @@ public class MyArrayList<E> implements MyList<E> {
     //     returns true if data was updated 
 
     public boolean addAll(Collection<? extends E> c) {
+        System.out.println("Need to write: addAll");
         return false;
     }
     
@@ -187,6 +192,7 @@ public class MyArrayList<E> implements MyList<E> {
     //POST:if these are the same, return true
     //     else returm false  
     public boolean containsAll(Collection<?> c) {
+        System.out.println("Need to write: containsAll");
         return false;
     }
 
@@ -196,6 +202,7 @@ public class MyArrayList<E> implements MyList<E> {
     //POST Adds all the elements in the collection c 
     //     returns true if data was updated 
     public boolean removeAll(Collection<?> c) {
+        System.out.println("Need to write: removeAll");
         return false;
     }
 
