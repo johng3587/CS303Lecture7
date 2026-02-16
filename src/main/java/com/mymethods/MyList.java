@@ -1,3 +1,4 @@
+package com.mymethods;
 import java.util.Collection;
 
 public interface MyList<E> extends java.util.Collection<E> {

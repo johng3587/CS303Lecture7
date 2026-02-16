@@ -1,6 +1,15 @@
+package com.mymethods;
 import java.util.*;
 
 @SuppressWarnings("unchecked")
+
+/**
+ * Add elements
+ * Verify a value exists
+ * Modify a value in the array
+ * Erase a value
+ * Resize the array
+ */
 
 public class MyArrayList<E> implements MyList<E> {
     
@@ -26,8 +35,13 @@ public class MyArrayList<E> implements MyList<E> {
     //     add data item at the index position
     //     increase size    
     public void add(int index, E e) {
-        System.out.println("Need to write: add");
-
+        if (index < 0 || index > size) throw new IndexOutOfBoundsException("index " + index + " out of bounds");
+        ensureCapacity();
+        for (int i = size - 1; i >= index; i--) {
+            data[i + 1] = data[i];
+        }
+        data[index] = e;
+        size++;
     }
 
     /** Create a new larger array, double the current size + 1 */
@@ -123,8 +137,14 @@ public class MyArrayList<E> implements MyList<E> {
     //     Return the element that was removed from the list.  
     //     decrement size
     public E remove(int index) {
-        System.out.println("Need to write: remove");
-        return null;
+        checkIndex(index);
+        E temp = (E) data[index];
+        for (int i = index; i < size - 1; i++) {
+            data[i] = data[i + 1];
+        }
+        data[size - 1] = null;
+        size--;
+        return temp;
     }
 
     @Override 
@@ -135,8 +155,10 @@ public class MyArrayList<E> implements MyList<E> {
     //     sets index value to new element  
     //     returns element
     public E set(int index, E e) {
-        System.out.println("Need to write: set");
-        return null;
+        checkIndex(index);
+        E temp = (E) data[index];
+        data[index] = e;
+        return temp;
     }
 
     @Override
@@ -171,8 +193,9 @@ public class MyArrayList<E> implements MyList<E> {
     //POST: creates an array of objects, 
     //      copies elements from array to new array & returns new array
     public Object[] toArray() {
-        System.out.println("Need to write: toArray");
-        return null;
+        E[] newArray = (E[])(new Object[size]);
+        System.arraycopy(data, 0, newArray, 0, size);
+        return newArray;
     }
 
     
@@ -182,8 +205,13 @@ public class MyArrayList<E> implements MyList<E> {
     //     returns true if data was updated 
 
     public boolean addAll(Collection<? extends E> c) {
-        System.out.println("Need to write: addAll");
-        return false;
+        boolean added = false;
+        for (E item : c) {
+            if (add(item)) {
+                added = true;
+            }
+        }
+        return added;
     }
     
     @Override
@@ -192,8 +220,10 @@ public class MyArrayList<E> implements MyList<E> {
     //POST:if these are the same, return true
     //     else returm false  
     public boolean containsAll(Collection<?> c) {
-        System.out.println("Need to write: containsAll");
-        return false;
+        for (Object o : c) {
+            if (!contains((E)o)) return false;
+        }
+        return true;
     }
 
     @Override
@@ -202,8 +232,13 @@ public class MyArrayList<E> implements MyList<E> {
     //POST Adds all the elements in the collection c 
     //     returns true if data was updated 
     public boolean removeAll(Collection<?> c) {
-        System.out.println("Need to write: removeAll");
-        return false;
+        for (Object item : c) {
+            while (contains(item)) { // NOTE: Removes all occurrences of item in the list
+                remove(indexOf(item));
+            }
+            // if (contains(item)) remove(indexOf(item)); // NOTE: removes only the first occurrence of item in the list
+        }
+        return true;
     }
 
 

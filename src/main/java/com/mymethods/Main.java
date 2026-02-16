@@ -1,3 +1,4 @@
+package com.mymethods;
 
 public class Main {
 

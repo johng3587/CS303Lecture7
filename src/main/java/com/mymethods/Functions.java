@@ -1,3 +1,4 @@
+package com.mymethods;
 import java.util.Iterator;
 
 public class Functions {
