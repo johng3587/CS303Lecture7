@@ -207,7 +207,7 @@ public class MyArrayList<E> implements MyList<E> {
     public boolean addAll(Collection<? extends E> c) {
         boolean added = false;
         for (E item : c) {
-            if (add(item)) {
+            if (add((E)item)) {
                 added = true;
             }
         }
@@ -231,14 +231,16 @@ public class MyArrayList<E> implements MyList<E> {
     //PRE: Accepts a list of items 'c'
     //POST Adds all the elements in the collection c 
     //     returns true if data was updated 
-    public boolean removeAll(Collection<?> c) {
+    public boolean removeAll(Collection<?> c) { // Question, could we change this to Collection<E> to avoid needing to typecast?
+        boolean modified = false;
         for (Object item : c) {
-            while (contains(item)) { // NOTE: Removes all occurrences of item in the list
-                remove(indexOf(item));
+            while (contains((E)item)) { // NOTE: Removes all occurrences of item in the list
+                remove(indexOf((E)item));
+                modified = true;
             }
             // if (contains(item)) remove(indexOf(item)); // NOTE: removes only the first occurrence of item in the list
         }
-        return true;
+        return modified;
     }
 
 
