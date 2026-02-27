@@ -94,11 +94,21 @@ public class MyLinkedList<E> implements MyList<E> {
         } else {
             // COMPLETE THE ADD STEPS HERE
             Node<E> temp = head;
-            for (int i = 0; i < index; i++) {
+            for (int i = 1; i < index; i++) {
                 temp = temp.next;
             }
-            temp.next = new Node<E>(e);
+            temp.next = new Node<E>(e, temp.next);
             size++;
+
+            // Alternatively:
+            /* Node<E> newNode = new Node<>(e);
+            Node<E> temp2 = head;
+            for (int i = 1; i < index; i++) {
+                temp2 = temp2.next;
+            }
+            newNode.next = temp2.next;
+            temp2.next = newNode;
+            size++; */
         }
     }
 
@@ -116,17 +126,18 @@ public class MyLinkedList<E> implements MyList<E> {
     // POST: New node is added prior to the location of insertion
 
     public void addBefore(E prior, E data) {
+        if (prior == null) throw new IllegalArgumentException("Prior cannot be null.");
 
-        System.out.println("You must add the logic for method: AddBefore");
         // check if prior exists
-        if (!contains(prior)) throw new NoSuchElementException("Prior not in list");
+        if (!contains(prior)) throw new NoSuchElementException("Prior not in list"); // Or we can add to end.
         // if list is empty, add node
-        if (size == 0) {
-            add(data);
-            return;
+        if (size == 0) { // Actually is the same as !
+            throw new IllegalStateException("List is empty");
+            /* add(data);
+            return; */
         }
         // add node prior to head /// (Not sure on this)
-        if (head.element == data) {
+        if (head.element == prior) {
             addFirst(data);
             return;
         }
@@ -136,7 +147,10 @@ public class MyLinkedList<E> implements MyList<E> {
             temp = temp.next;
         }
         temp.next = new Node<E>(data, temp.next); // Jeez this is confusing
-        // else find where to insert & adjust pointers
+        size++;
+
+        //Alternatively:
+        add(indexOf(prior), data);
 
     }
 
@@ -169,7 +183,6 @@ public class MyLinkedList<E> implements MyList<E> {
     public E removeLast() {
         if (size == 0)
             return null;
-
         else if (size == 1) {
             E temp = head.element;
             head = tail = null;
@@ -196,18 +209,43 @@ public class MyLinkedList<E> implements MyList<E> {
 
     public E deleteBefore(E prior) {
         System.out.println("You must add the logic for method: AddBefore");
+        if (prior == null) throw new IllegalArgumentException("Prior cannot be null.");
 
         // check if prior exists
+        if (!contains(prior)) throw new IllegalArgumentException("List does not contain prior.");
 
         // if there is <= 1 element in list
+        if (size <= 1) throw new IllegalStateException("No element prior to prior.");
 
         // if trying to delete before the head
+        if (prior == head.element) throw new IllegalArgumentException("No element prior to head.");
 
         // if trying to delete the head
+        if (prior == head.next.element) {
+            E temp = head.element;
+            head = head.next;
+            return temp;
+        }
+
+        // If the second element is the one we're looking for,
+        // Point the head's next to the third element, dropping the second.
+        if (head.next.element == prior) {
+            E temp = head.next.element;
+            head.next = head.next.next;
+            return temp;
+        }
 
         // find element to delte & adjust the pointers
+        Node<E> temp = head;
+        // Stops when the element beyond the next is the one marking to delete the previous
+        // Therefore, when this stops, the next node is the one to delete.
+        while (temp.next.next.element != prior) {
+            temp = temp.next;
+        }
+        E tempElement = temp.next.element;
+        temp.next = temp.next.next; // Set the next to be the one beyond the next, removing the pointer to the one to delete.
 
-        return null;
+        return tempElement;
     }
 
     @Override
@@ -274,7 +312,11 @@ public class MyLinkedList<E> implements MyList<E> {
     // POST:checks data elements if found, returns true
     // else returns false
     public boolean contains(Object e) {
-        System.out.println("You must add the logic for method: contains");
+        Node<E> temp = head;
+        while (temp != null) {
+            if (temp.element.equals(e)) return true;
+            temp = temp.next;
+        }
         return false;
     }
 
@@ -295,7 +337,14 @@ public class MyLinkedList<E> implements MyList<E> {
 
     public int indexOf(Object e) {
         System.out.println("You must add the logic for method: indexOf");
-        return -1;
+        if (!contains(e)) return -1;
+        Node<E> temp = head;
+        Integer count = 0;
+        while (temp.element != e) {
+            temp = temp.next;
+            count++;
+        }
+        return count;
     }
 
     @Override
@@ -303,8 +352,14 @@ public class MyLinkedList<E> implements MyList<E> {
     // PRE: accepts an object
     // POST:returns the last index if found or -1 if not
     public int lastIndexOf(E e) {
-        System.out.println("You must add the logic for method: lastIndexOf");
-        return -1;
+        if (!contains(e)) return -1;
+        Node<E> temp = head;
+        Integer lastIndex = -1;
+        for (int i = 0; temp != null; i++) {
+            if (temp.element == e) lastIndex = i;
+            temp = temp.next;
+        }
+        return lastIndex;
     }
 
     @Override
@@ -317,7 +372,15 @@ public class MyLinkedList<E> implements MyList<E> {
 
     public E set(int index, E e) {
         System.out.println("You must add the logic for method: set");
-        return null;
+        Node<E> temp = head;
+        if (index > size - 1 || index < 0) throw new IndexOutOfBoundsException("Index invalid.");
+        //TODO: set
+        for (int i=0; i != index; i++) {
+            temp = temp.next;
+        }
+        E tempElement = temp.element;
+        temp.element = e;
+        return tempElement;
     }
 
     @Override
@@ -335,7 +398,7 @@ public class MyLinkedList<E> implements MyList<E> {
 
     @Override
     public <T> T[] toArray(T[] array) {
-        // not implementing at this time
+        // TODO: not implementing at this time
         return null;
     }
 
@@ -352,7 +415,7 @@ public class MyLinkedList<E> implements MyList<E> {
 
         @Override
         public boolean hasNext() {
-            return (current != null);
+            return (current != null); // Shouldn't this be current.next != null?
         }
 
         @Override
