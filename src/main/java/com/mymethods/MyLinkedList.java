@@ -137,20 +137,20 @@ public class MyLinkedList<E> implements MyList<E> {
             return; */
         }
         // add node prior to head /// (Not sure on this)
-        if (head.element == prior) {
+        if (head.element.equals(prior)) {
             addFirst(data);
             return;
         }
 
         Node<E> temp = head;
-        while (temp.next.element != prior) {
+        while (!temp.next.element.equals(prior)) { //TODO: Fix
             temp = temp.next;
         }
         temp.next = new Node<E>(data, temp.next); // Jeez this is confusing
         size++;
 
         //Alternatively:
-        add(indexOf(prior), data);
+        //add(indexOf(prior), data);
 
     }
 
@@ -208,7 +208,6 @@ public class MyLinkedList<E> implements MyList<E> {
     // POST: The node prior to the value given is deleted
 
     public E deleteBefore(E prior) {
-        System.out.println("You must add the logic for method: AddBefore");
         if (prior == null) throw new IllegalArgumentException("Prior cannot be null.");
 
         // check if prior exists
@@ -218,20 +217,22 @@ public class MyLinkedList<E> implements MyList<E> {
         if (size <= 1) throw new IllegalStateException("No element prior to prior.");
 
         // if trying to delete before the head
-        if (prior == head.element) throw new IllegalArgumentException("No element prior to head.");
+        if (prior.equals(head.element)) throw new IllegalArgumentException("No element prior to head.");
 
         // if trying to delete the head
-        if (prior == head.next.element) {
+        if (prior.equals(head.next.element)) {
             E temp = head.element;
             head = head.next;
+            size--;
             return temp;
         }
 
         // If the second element is the one we're looking for,
         // Point the head's next to the third element, dropping the second.
-        if (head.next.element == prior) {
+        if (head.next.element.equals(prior)) {
             E temp = head.next.element;
             head.next = head.next.next;
+            size--;
             return temp;
         }
 
@@ -239,12 +240,12 @@ public class MyLinkedList<E> implements MyList<E> {
         Node<E> temp = head;
         // Stops when the element beyond the next is the one marking to delete the previous
         // Therefore, when this stops, the next node is the one to delete.
-        while (temp.next.next.element != prior) {
+        while (!temp.next.next.element.equals(prior)) {
             temp = temp.next;
         }
         E tempElement = temp.next.element;
         temp.next = temp.next.next; // Set the next to be the one beyond the next, removing the pointer to the one to delete.
-
+        size--;
         return tempElement;
     }
 
@@ -312,6 +313,7 @@ public class MyLinkedList<E> implements MyList<E> {
     // POST:checks data elements if found, returns true
     // else returns false
     public boolean contains(Object e) {
+        if (size == 0) return false;
         Node<E> temp = head;
         while (temp != null) {
             if (temp.element.equals(e)) return true;
@@ -326,8 +328,12 @@ public class MyLinkedList<E> implements MyList<E> {
     // POST:verify the index & return null if invalid
     // return the element
     public E get(int index) {
-        System.out.println("You must add the logic for method: get");
-        return null;
+        if (index >= size) throw new IndexOutOfBoundsException("Index out of bounds.");
+        Node<E> temp = head;
+        for (int i=0; i<index; i++) {
+            temp = temp.next;
+        }
+        return temp.element;
     }
 
     @Override
@@ -336,11 +342,11 @@ public class MyLinkedList<E> implements MyList<E> {
     // POST:returns the index if found or -1 if not
 
     public int indexOf(Object e) {
-        System.out.println("You must add the logic for method: indexOf");
         if (!contains(e)) return -1;
+        if (size == 0) return -1;
         Node<E> temp = head;
         Integer count = 0;
-        while (temp.element != e) {
+        while (temp != null && !temp.element.equals(e)) {
             temp = temp.next;
             count++;
         }
@@ -356,7 +362,7 @@ public class MyLinkedList<E> implements MyList<E> {
         Node<E> temp = head;
         Integer lastIndex = -1;
         for (int i = 0; temp != null; i++) {
-            if (temp.element == e) lastIndex = i;
+            if (temp.element.equals(e)) lastIndex = i;
             temp = temp.next;
         }
         return lastIndex;
@@ -371,10 +377,8 @@ public class MyLinkedList<E> implements MyList<E> {
     // returns element
 
     public E set(int index, E e) {
-        System.out.println("You must add the logic for method: set");
         Node<E> temp = head;
         if (index > size - 1 || index < 0) throw new IndexOutOfBoundsException("Index invalid.");
-        //TODO: set
         for (int i=0; i != index; i++) {
             temp = temp.next;
         }

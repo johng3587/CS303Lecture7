@@ -1,10 +1,9 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.Iterator;
 
 import com.mymethods.MyDblLinkedList;
-
-import java.util.Iterator;
 
 public class Functions {
 
@@ -162,7 +161,7 @@ public class Functions {
 
     public static MyDblLinkedList<Person> loadData(MyDblLinkedList<Person> people){
         try{
-            Scanner scanner = new Scanner(new File("people.txt"));
+            Scanner scanner = new Scanner(new File("src\\test\\java\\people.txt"));
 
             String inputLine;
             //while (scanner.hasNextLine() && peopleCounter < arrSize){
