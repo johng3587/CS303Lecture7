@@ -177,22 +177,17 @@ public class MyDblLinkedList<E extends Comparable<? super E>> implements MyList<
             addLast(data);
             return;
         }
-        // Head element temp fix, there must be a size error somewhere.
-        if (size == 1 || head.element.equals(prior)) { // Meaning the one element *must* be the prior element.
+        if (size == 1 || head.element.equals(prior)) { // Meaning the one element *must* be the prior element, or the first element is the prior.
             addFirst(data);
             return;
         } else { // We know by now that our prior element must be at least in the second position
-            // TODO: Rework logic, this fails. Use scratch paper.
             Node<E> current = head;
             while (!current.element.equals(prior)) { // Ends when the current node has the previous element
                 current = current.next;
             }
             Node<E> newNode = new Node<>(data);
             newNode.next = current;
-            newNode.prev = current.prev; // Null because this is the head, why isn't this caught?
             current.prev = newNode;
-            // TODO: Exception in thread "main" java.lang.NullPointerException: Cannot assign field "next" because "newNode.prev" is null
-            // Add japan before russia with list [Russia, Canada, America]
             newNode.prev.next = newNode;
             size++;
         }
@@ -348,17 +343,14 @@ public class MyDblLinkedList<E extends Comparable<? super E>> implements MyList<
     // POST:returns the last index if found or -1 if not
 
     public int lastIndexOf(E e) {
-        // Left as an exercise in lecture 8 (same code)
-        int position = size - 1, holdPosition = -1;
-        Node<E> current = tail;
-
-        if (current != null) {
-            if (current.element.equals(e))
-                return position;
-            current = current.prev;
-            position--;
+        if (!contains(e)) return -1;
+        Node<E> temp = head;
+        Integer lastIndex = -1;
+        for (int i = 0; temp != null; i++) {
+            if (temp.element.equals(e)) lastIndex = i;
+            temp = temp.next;
         }
-        return -1;
+        return lastIndex;
     }
 
     @Override
@@ -389,8 +381,7 @@ public class MyDblLinkedList<E extends Comparable<? super E>> implements MyList<
     // PRE: none
     // POST: returns true if the list is circular, false if not
     public boolean isCircular() {
-        System.out.println("\nTASK 4: WRITE THE CODE FOR ISCIRCULAR");
-        return false;
+        return tail.next == head;
     }
 
     @Override /** Override iterator() defined in Iterable */
