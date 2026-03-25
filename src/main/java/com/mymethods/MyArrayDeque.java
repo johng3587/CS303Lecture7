@@ -122,7 +122,6 @@ public class MyArrayDeque<E> {
     // reset data to new array
 
     private void resize() {
-        System.out.println("TASK 1: RESIZE NEEDS TO BE CODED");
         E[] newData = (E[]) new Object[data.length * 2];
         for (int i = 0; i < data.length; i++) {
             newData[i] = data[(head + i) % data.length];
@@ -178,7 +177,6 @@ public class MyArrayDeque<E> {
     // highest value
     @SuppressWarnings("unchecked")
     public void addPriority(E e) {
-        System.out.println("TASK 4: ADD PRIORITY NEEDS TO BE CODED");
 
         if (size == 0) {
             addFirst(e);

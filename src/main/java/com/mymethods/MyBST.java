@@ -25,10 +25,11 @@ public class MyBST<E extends Comparable<E>> implements MyTree<E> {
         return size == 0;
     }
 
+    @Override
     // TASK 1: SEARCH
     // PRE: accepts an element to find in the tree
     // POST: if tree is found return true, else return false
-    @Override
+
     public boolean search(E e) {
         TreeNode<E> current = root;
         while (current != null) {
@@ -103,7 +104,13 @@ public class MyBST<E extends Comparable<E>> implements MyTree<E> {
     // PRE: none
     // POST: prints tree preOrder
     public String preOrderString() {
-        return ("TASK 2: Code preOrder");
+        return preOrder(root);
+    }
+
+    public String preOrder(TreeNode<E> root) {
+        if (root == null)
+            return "";
+        return " " + preOrder(root.left) + preOrder(root.right);
     }
 
     // TASK 4: POSTORDER
