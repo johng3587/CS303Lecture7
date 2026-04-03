@@ -37,10 +37,8 @@ public class MyBST<E extends Comparable<E>> implements MyTree<E> {
                 current = current.left;
             } else if (e.compareTo(current.element) > 0) {
                 current = current.right;
-            } else if (e.compareTo(current.element) == 0) {
-                return true;
             } else {
-                throw new RuntimeException("Something went wrong! Search method, comparing is not less than, greater than, or equal to 0.");
+                return true;
             }
         }
         return false;
@@ -110,14 +108,21 @@ public class MyBST<E extends Comparable<E>> implements MyTree<E> {
     public String preOrder(TreeNode<E> root) {
         if (root == null)
             return "";
-        return " " + preOrder(root.left) + preOrder(root.right);
+        return root.element + " " + preOrder(root.left) + preOrder(root.right);
     }
 
     // TASK 4: POSTORDER
     // PRE: none
     // POST: prints tree postOrder
     public String postOrderString() {
-        return ("TASK 3: Code postOrder");
+        return preOrder(root);
+    }
+
+    public String postOrder(TreeNode<E> root) {
+        if (root == null)
+            return "";
+
+        return postOrder(root.left) + postOrder(root.right) + root.element + " ";
     }
 
     // TASK 5: DELETE METHOD
@@ -147,15 +152,47 @@ public class MyBST<E extends Comparable<E>> implements MyTree<E> {
             return false;
 
         // case 2: current has 0 or 1 child
+        if (current.left == null || current.right == null) {
+            TreeNode<E> child;
+            if (current.left != null)
+                child = current.left;
+            else
+                child = current.right;
+
+            if (parent == null)
+                root = child;
+            else {
+                if (parent.left == current)
+                    parent.left = child;
+                else
+                    parent.right = child;
+            }
+            size--;
+            return true;
+        }
 
         // case 3: current has 2 children
-        // swap with the inorder predecessor
-        // (the rightmost node in left child) & swap
-        TreeNode<E> parentofRightMost = current;
-        TreeNode<E> rightMost = current.left;
+        if (current.left != null && current.right != null) {
+            // swap with the inorder predecessor
+            // (the rightmost node in left child) & swap
+            TreeNode<E> parentofRightMost = current;
+            TreeNode<E> rightMost = current.left;
+            while (rightMost.right != null) {
+                parentofRightMost = rightMost;
+                rightMost = rightMost.right;
+            }
 
-        size--;
-        return true;
+            // Swap element at current with rightmost value
+            current.element = rightMost.element;
+            if (parentofRightMost == rightMost)
+                parentofRightMost.right = rightMost.left;
+            else
+                parentofRightMost.left = rightMost.left;
+            size--;
+            return true;
+
+        }
+        return false;
 
     }
 
@@ -189,6 +226,18 @@ public class MyBST<E extends Comparable<E>> implements MyTree<E> {
     public boolean isLeaf(E e) {
         TreeNode<E> current = root;
         System.out.println("\tTASK 6: code isLeaf method");
+        while (current != null) {
+            if (e.compareTo(current.element) < 0) {
+                current = current.left;
+            } else if (e.compareTo(current.element) > 0)
+                current = current.right;
+            else {
+                if (current.left == null && current.right == null)
+                    return true;
+                else
+                    return false;
+            }
+        }
         return false;
     }
 
@@ -198,12 +247,26 @@ public class MyBST<E extends Comparable<E>> implements MyTree<E> {
 
     public int heightWrapper() {
         TreeNode<E> current = root;
-        return height(current);
+        return height(current) - 1;
     }
 
     private int height(TreeNode<E> root) {
-        System.out.println("\tTASK 7: code height method");
-        return 0;
+        if (root == null) return 0;
+        else return 1 + Math.max(height(root.left), height(root.right));
+        /* if (root.right == null && root.left == null) 
+            return 0;
+        if (root.right == null || root.left == null) {
+            if (root.right == null)
+                return height(root.left) + 1;
+            else
+                return height(root.right) + 1;
+        }
+        int heightLeft = height(root.left);
+        int heightRight = height(root.right);
+        if (heightLeft > heightRight)
+            return heightLeft + 1;
+        else
+            return heightRight + 1; */
     }
 
     // TASK 8: Depth
@@ -214,7 +277,17 @@ public class MyBST<E extends Comparable<E>> implements MyTree<E> {
     public int depth(E e) {
         TreeNode<E> current = root;
         int depthCount = -1;
-        System.out.println("\tTASK 8: code depth method");
+        while (current != null) {
+            if (e.compareTo(current.element) < 0) {
+                current = current.left;
+                depthCount++;
+            } else if (e.compareTo(current.element) > 0) {
+                current = current.right;
+                depthCount++;
+            } else {
+                return depthCount;
+            }
+        }
         return -1;
     }
 
@@ -224,9 +297,11 @@ public class MyBST<E extends Comparable<E>> implements MyTree<E> {
 
     public E findMin() {
         TreeNode<E> current = root;
-        System.out.println("\tTASK 9: code minimum method");
+        while (current.left != null) {
+            current = current.left;
+        }
 
-        return null;
+        return current.element;
     }
 
     // TASK 9: MAXIMUM
@@ -235,9 +310,11 @@ public class MyBST<E extends Comparable<E>> implements MyTree<E> {
 
     public E findMax() {
         TreeNode<E> current = root;
-        System.out.println("\tTASK 9: code maximum method");
+        while (current.right != null) {
+            current = current.right;
+        }
 
-        return null;
+        return current.element;
     }
 
     // TASK 10: UPDATE
@@ -245,9 +322,15 @@ public class MyBST<E extends Comparable<E>> implements MyTree<E> {
     // POST: updates the original value in the BST
 
     public boolean update(E origE, E newE) {
+        if (!search(origE) || !search(newE)) return false;
+        else {
+            delete(origE);
+            insert(newE);
+        }
+
 
         System.out.println("\tTASK 10: code update method");
-        return false;
+        return true;
     }
 
     @Override /** Override iterator() defined in Iterable */
