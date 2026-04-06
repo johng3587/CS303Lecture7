@@ -1,29 +1,45 @@
-public class Person implements Comparable<Person>{
+public class Person implements Comparable<Person> {
     protected char type;
     protected String lname;
     protected String fname;
     protected int age;
 
-    Person(){
+    Person() {
         type = ' ';
         lname = "";
         fname = "";
         age = 0;
     }
-    Person(char t, String l, String f, int a){
+
+    Person(char t, String l, String f, int a) {
         type = t;
         lname = l;
         fname = f;
         age = a;
     }
 
-    public char getType() { return type;}
-    public String getFName() { return fname;}
-    public String getLName() { return lname;}
-    public int getAge() { return age;}
-    public void setLName(String l) { lname = l;}
-    public String toString(){
-        return type + lname + fname;
+    public char getType() {
+        return type;
+    }
+
+    public String getFName() {
+        return fname;
+    }
+
+    public String getLName() {
+        return lname;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setLName(String l) {
+        lname = l;
+    }
+
+    public String toString() {
+        return lname + " ";
     }
 
     @Override

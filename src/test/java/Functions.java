@@ -1,111 +1,108 @@
-import com.mymethods.MyBST;
+import java.util.Scanner;
+import java.io.IOException;
+import java.io.File;
+
+import com.mymethods.MyHeap;
+import com.mymethods.MyHeapSort;
 
 public class Functions {
 
-    public static boolean isDigits(String inString){
-        if (inString == null || inString.isEmpty()) 
+    public static boolean isDigits(String inString) {
+        if (inString == null || inString.isEmpty())
             return false;
         for (char c : inString.toCharArray()) {
-            if (!Character.isDigit(c)) 
-               return false;
+            if (!Character.isDigit(c))
+                return false;
         }
         return true;
     }
 
-    public static void testInsertDelete(){
-        System.out.println("\nTEST BST SEARCH, INSERT & TRAVERSALS (TASKS 1-4)");
+    public static void example1() {
+        System.out.println("\nEXAMPLE 1: TEST MYHEAP ADD(MAXIMUM)");
+        boolean max = true;
+        MyHeap<String> Heap1 = new MyHeap<>(max);
+        Heap1.add("Fred");
+        System.out.print("(1a) ");
+        System.out.println(Heap1);
+        Heap1.add("Alvin");
+        System.out.print("(1b) ");
+        System.out.println(Heap1);
+        Heap1.add("Wilma");
+        System.out.print("(1c) ");
+        System.out.println(Heap1);
+        Heap1.add("Theodore");
+        System.out.print("(1d) ");
+        System.out.println(Heap1);
 
-        String [] BSTlist = new String[] {"Alvin", "Theodore","Wilma","Fred","Betty"};
-
-        System.out.println("\nTESTING NODE INSERT:");
-
-        MyBST<String> bst1 = new MyBST<>(BSTlist);
-        System.out.println("\tIN:  " + bst1.inOrderString()); 
-        System.out.println("\tPRE: " + bst1.preOrderString()); 
-
-        System.out.println("\n1. TESTING SEARCH METHOD (TASK 1):  ");
-        System.out.println("\tFinding Wilma: " + bst1.search("Wilma"));
-        System.out.println("\tFinding NotFd: " + bst1.search("NotFd"));
-
-        System.out.println("\n2. TESTING INSERT METHOD (TASK 2):  ");
-        System.out.println("\tInserting Aaron:   " + bst1.insert("Aaron"));
-        System.out.println("\tInserting BamBam:  " + bst1.insert("BamBam"));
-        System.out.println("\tInserting Happy:   " + bst1.insert("Happy")); 
-        System.out.println("\tInserting Pebbles: " + bst1.insert("Pebbles"));
-        System.out.println("\tIN:   " + bst1.inOrderString()); 
-        System.out.println("\tPRE:  " + bst1.preOrderString()); 
-        System.out.println("\tPOST: " + bst1.postOrderString()); 
-
-        System.out.println("\n3. TESTING PREORDER METHOD (TASK 3):  ");
-        System.out.println("\t" + bst1.preOrderString());  
- 
-        System.out.println("\n4. TESTING POSTORDER METHOD (TASK 4):  ");
-
-        System.out.println("\n5. TESTING DELETE METHOD (TASK 5):  ");
-        bst1.delete("Theodore");
-        System.out.println("\t" + bst1.inOrderString());  
-        
-        System.out.print("\n\tPrinting BST: ");
-        for (String s : bst1)
-            System.out.print(s.toUpperCase() + " ");
+        System.out.println("\nEXAMPLE 1: TEST MYHEAP REMOVE(MAXIMUM)");
+        System.out.println("(1e) " + Heap1.top() + " :: " + Heap1.remove());
+        System.out.println("(1f) " + Heap1.top() + " :: " + Heap1.remove());
+        System.out.println("(1g) " + Heap1.top() + " :: " + Heap1.remove());
+        System.out.println("(1h) " + Heap1.top() + " :: " + Heap1.remove());
+        System.out.println("(1i) " + Heap1.top() + " :: " + Heap1.remove());
         System.out.println();
-    } 
 
-     public static void testOther(){
-        System.out.println("\nTEST BST ISLEAF, HEIGHT, DEPTH, MIN, MAX, UPDATE (TASKS 6-10)");
+    }
 
-        String [] BSTlist = new String[] {"Alvin", "Theodore","Wilma","Fred","Betty"};
-        MyBST<String> bst1 = new MyBST<>(BSTlist);
-        bst1.insert("Happy");
-        bst1.insert("Pebbles");  
-        bst1.insert("Aaron");      
+    public static MyHeap<Person> loadData(MyHeap<Person> people) {
+        try {
+            Scanner scanner = new Scanner(new File("people.txt"));
 
-        System.out.println("\n6.  TESTING IS LEAF METHOD (TASK 6):  ");
-        System.out.println("\tAaron isLeaf:   " + bst1.isLeaf("Aaron"));
-        System.out.println("\tAlvin isLeaf:   " + bst1.isLeaf("Alvin"));
-        System.out.println("\tBetty isLeaf:   " + bst1.isLeaf("Betty"));
-        System.out.println("\tFred  isLeaf:   " + bst1.isLeaf("Fred"));
-        System.out.println("\tTheo  isLeaf:   " + bst1.isLeaf("Theodore"));
-        System.out.println("\tHappy isLeaf:   " + bst1.isLeaf("Happy"));
-        System.out.println("\tWilma isLeaf:   " + bst1.isLeaf("Wilma"));
-        System.out.println("\tPebbles isLeaf: " + bst1.isLeaf("Pebbles"));
-        System.out.println("\tNotFd isLeaf:   " + bst1.isLeaf("Notfd"));  
+            String inputLine;
+            while (scanner.hasNextLine()) {
+                inputLine = scanner.nextLine();
+                String[] tokens = inputLine.split(",");
+                try {
+                    int tempAge = Integer.parseInt(tokens[3]);
+                    char tempType = tokens[0].toUpperCase().charAt(0);
+                    if (tempType != 'P' && tempType != 'T' && tempType != 'E' && tempType != 'S')
+                        throw new TypeException(tempType);
 
-        System.out.println("\n7.  TESTING HEIGHT METHOD (TASK 7):  ");
-        System.out.println("\tThe height of the tree is: " + bst1.heightWrapper());  
+                    Person tempP = new Person(tokens[0].charAt(0), tokens[1], tokens[2], tempAge);
+                    people.add(tempP);
+                } catch (TypeException e) {
+                    System.out.println("Type exception: " + e.getMessage());
+                } catch (NumberFormatException e) {
+                    System.out.println("Number format exception: " + e.getMessage());
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    System.out.println("Not enough tokens in input file: " + e.getMessage());
+                } catch (Exception e) {
+                    System.out.println("Oops...: " + e.getMessage());
+                }
+            }
+            System.out.println("closing scanner");
+            scanner.close();
+        } catch (IOException e) {
+            System.out.println("Error opening the file: " + e.getMessage());
+        }
+        return people;
 
+    }
 
-        System.out.println("\n8.  TESTING DEPTH METHOD (TASK 8):  ");
-        System.out.println("\tDepth of Alvin is: " + bst1.depth("Alvin"));  
-        System.out.println("\tDepth of Fred  is: " + bst1.depth("Fred")); 
-        System.out.println("\tDepth of Happy is: " + bst1.depth("Happy"));   
-        System.out.println("\tDepth of NotFd is: " + bst1.depth("Notfd"));  
+    public static void example2() {
+        // TASK 2: UPDATE MAX VALUE
+        System.out.println("\nEXAMPLE 2: TEST MYHEAP ADD(MINIMUM)");
+        boolean max = true;
+        MyHeap<Person> people = new MyHeap<>(max);
+        people = loadData(people);
+        System.out.println("(2a) " + people);
 
-        System.out.println("\n9.  TESTING MIN & MAX METHODS (TASK 9):  ");
-        System.out.println("\tBST Minimum is: " + bst1.findMin());  
-        System.out.println("\tBST Maximum is: " + bst1.findMax()); 
+        System.out.println("\nEXAMPLE2: TEST MYHEAP REMOVE(MINIMUM)");
+        System.out.println("(2b) " + people.top() + " :: " + people.remove());
+        System.out.println("(2c) " + people.top() + " :: " + people.remove());
+        System.out.println("     " + people);
 
-        System.out.println("\n\tIN:   " + bst1.inOrderString()); 
-        System.out.println("\tPRE:  " + bst1.preOrderString()); 
+    }
 
-        System.out.println("\n10.  TESTING UPDATE METHOD (TASK 10):  ");
-        System.out.println("\tA) Update Wilma to Abigail: " + bst1.update("Wilma", "Abigail"));  
-        System.out.println("\n\tIN:  " + bst1.inOrderString()); 
-        System.out.println("\tPRE: " + bst1.preOrderString()); 
+    public static void example3() {
+        System.out.println("\nEXAMPLE 3: TEST MYHEAPSORT");
 
-        System.out.println("\tB) Update Fred to Barney: " + bst1.update("Fred", "Barney"));  
-        System.out.println("\tIN:  " + bst1.inOrderString()); 
-        System.out.println("\tPRE: " + bst1.preOrderString()); 
-          
-        System.out.println("\tC) Update Happy to Barney: " + bst1.update("Happy", "Barney"));  
+        Integer[] list = { 2, 3, 2, 5, 6, 1, -2, 3, 14, 12 };
+        //boolean max = true;
+        MyHeapSort.heapSort(list);
 
-        System.out.println("\n\tIN:  " + bst1.inOrderString()); 
-        System.out.println("\tPRE: " + bst1.preOrderString()); 
-         
-        
-        System.out.print("\nPrinting BST ");
-        for (String s : bst1)
-            System.out.print(s.toUpperCase() + " ");
+        for (int i = 0; i < list.length; i++)
+            System.out.print(list[i] + " ");
         System.out.println();
-    } 
+    }
 }
