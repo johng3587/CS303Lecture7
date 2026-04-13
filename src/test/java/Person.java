@@ -34,19 +34,26 @@ public class Person implements Comparable<Person> {
         return age;
     }
 
+    public void setAge(int a) {
+        age = a;
+    }
+
     public void setLName(String l) {
         lname = l;
     }
 
     public String toString() {
-        return lname + " ";
+        return lname + ", " + fname + " - " + age + "\n";
     }
 
     @Override
     public int compareTo(Person other) {
-        int value = this.lname.compareTo(other.lname);
-        if (value == 0)
-            value = this.fname.compareTo(other.fname);
-        return value;
+        /*
+         * int value = this.lname.compareTo(other.lname);
+         * if (value == 0)
+         * value = this.fname.compareTo(other.fname);
+         * return value;
+         */
+        return this.age - other.age;
     }
 }
