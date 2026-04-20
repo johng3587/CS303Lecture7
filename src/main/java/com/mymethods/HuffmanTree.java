@@ -81,8 +81,18 @@ public class HuffmanTree implements Comparable<HuffmanTree> {
     // PRE: accepts current node & array of strings
     // POST: updates the code that represents the leaf nodes
     private static void assignCode(HuffmanNode root, String[] codes) {
-
-        System.out.println("Complete coding of assignCode");
+        if (root.left == null && root.right == null) {
+            codes[(int) root.element] = root.code;
+            return;
+        }
+        if (root.left != null) {
+            root.left.code = root.code + "0";
+            assignCode(root.left, codes);
+        }
+        if (root.right != null) {
+            root.right.code = root.code + "1";
+            assignCode(root.right, codes);
+        }
     }
 
     // PRE: accepts ascii array with counts of each character
@@ -125,8 +135,22 @@ public class HuffmanTree implements Comparable<HuffmanTree> {
     // by going left if it is '0' and right if '1'
     // append the leaf value to the output string
     public String decode(String text) {
-        System.out.println("Complete coding of deCode (Program 7");
-        return null;
+        String[] codes = getCode(root);
+        if (codes.length == 0)
+            return null;
+
+        StringBuilder sb = new StringBuilder();
+        HuffmanNode marker = root;
+        for (char c : text.toCharArray()) {
+            if (marker.right == null && marker.left == null) {
+                sb.append(marker.element);
+                marker = root;
+            }
+            // Not sure it matters what order you do checking and moving.
+            if (c == '0') marker = marker.left;
+            if (c == '1') marker = marker.right;
+        }
+        return sb.toString();
     }
 
     private static class HuffmanNode {
