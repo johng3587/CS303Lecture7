@@ -349,4 +349,355 @@ public class Functions {
         }
     }
 
+    public static void example15() {
+        System.out.println("\nExample 15: BFS & DFS Graph: Directed, Unweighted (same as ex16) ");
+
+        String[] vertices = { "Seattle", "San Francisco", "Los Angeles",
+                "Denver", "Kansas City", "Chicago", "Boston", "New York",
+                "Atlanta", "Miami", "Dallas", "Houston" };
+
+        int[][] edges = {
+                { 0, 1 }, { 0, 3 }, { 0, 5 },
+                { 1, 0 }, { 1, 2 }, { 1, 3 },
+                { 2, 1 }, { 2, 3 }, { 2, 4 }, { 2, 10 },
+                { 3, 0 }, { 3, 1 }, { 3, 2 }, { 3, 4 }, { 3, 5 },
+                { 4, 2 }, { 4, 3 }, { 4, 5 }, { 4, 7 }, { 4, 8 }, { 4, 10 },
+                { 5, 0 }, { 5, 3 }, { 5, 4 }, { 5, 6 }, { 5, 7 },
+                { 6, 5 }, { 6, 7 },
+                { 7, 4 }, { 7, 5 }, { 7, 6 }, { 7, 8 },
+                { 8, 4 }, { 8, 7 }, { 8, 9 }, { 8, 10 }, { 8, 11 },
+                { 9, 8 }, { 9, 11 },
+                { 10, 2 }, { 10, 4 }, { 10, 8 }, { 10, 11 },
+                { 11, 8 }, { 11, 9 }, { 11, 10 }
+        };
+
+        GenericGraph<String> graph1 = new GenericGraph<>(true, false, vertices, edges);
+
+        System.out.println("\nGraph Representation (adjacency list):  ");
+        graph1.printAdjacencyList();
+
+        GenericGraph.DFSOrder<String> dfsList = graph1.depthFirstSearch("Chicago");
+
+        System.out.print("\nGraph Depth First - Visit Order:        ");
+        System.out.println(dfsList.visitOrder);
+
+        System.out.print("Graph Depth First - Finish Order:       ");
+        System.out.println(dfsList.finishOrder);
+        if (graph1.isDirected()) {
+            System.out.print("Graph Depth First - Topological Order:  ");
+            System.out.println(dfsList.topologicalOrder);
+        }
+        System.out.println("Does this graph contain a cycle?        " + dfsList.isCyclic);
+
+        System.out.print("Graph Breadth First Search Order:       ");
+        List<String> bfsList = graph1.breadthFirstSearch("Chicago");
+        System.out.println(bfsList);
+    }
+
+    public static void example16() {
+
+        System.out.println("\nExample 16: BFS, DFS Graph: Unweighted, Undirected (same as ex15) ");
+
+        String[] vertices = { "Seattle", "San Francisco", "Los Angeles",
+                "Denver", "Kansas City", "Chicago", "Boston", "New York",
+                "Atlanta", "Miami", "Dallas", "Houston" };
+
+        int[][] edges = {
+                { 0, 1 }, { 0, 3 }, { 0, 5 },
+                { 1, 2 }, { 1, 3 },
+                { 2, 3 }, { 2, 4 }, { 2, 10 },
+                { 3, 4 }, { 3, 5 },
+                { 4, 5 }, { 4, 7 }, { 4, 8 }, { 4, 10 },
+                { 5, 6 }, { 5, 7 },
+                { 6, 7 },
+                { 7, 8 },
+                { 8, 9 }, { 8, 10 }, { 8, 11 },
+                { 9, 11 },
+                { 10, 11 }
+        };
+
+        GenericGraph<String> graph1 = new GenericGraph<>(false, false, vertices, edges);
+        System.out.println("\n   The edges for graph1:");
+        graph1.printAdjacencyList();
+
+        System.out.println("\nExample 16: Depth First Search ");
+        GenericGraph.DFSOrder<String> dfsList = graph1.depthFirstSearch("Chicago");
+
+        System.out.print("\nGraph Depth First - Visit Order:        ");
+        System.out.println(dfsList.visitOrder);
+
+        System.out.print("Graph Depth First - Finish Order:       ");
+        System.out.println(dfsList.finishOrder);
+        if (graph1.isDirected()) {
+            System.out.print("Graph Depth First - Topological Order:  ");
+            System.out.println(dfsList.topologicalOrder);
+        }
+        System.out.println("Does this graph contain a cycle?        " + dfsList.isCyclic);
+
+    }
+
+    public static void exampleD1() {
+        System.out.println("\n\nEXAMPLE D1: Dijkstra's Algorithm Shortest Path (Directed & Weighted)");
+
+        Integer[] vertices = { 0, 1, 2, 3, 4 };
+        int[][] edges = new int[][] {
+                { 0, 1, 10 }, { 0, 3, 30 }, { 0, 4, 100 },
+                { 1, 2, 50 }, { 2, 4, 10 }, { 3, 2, 20 }, { 3, 4, 60 }
+        };
+
+        GenericGraph<Integer> graph = new GenericGraph<>(true, true, vertices, edges);
+
+        GenericGraph.DijkstraResult<Integer> r = graph.dijkstra(0);
+
+        for (int i = 0; i < r.vertices.size(); i++) {
+            System.out.println(
+                    "Distance from 0 to " +
+                            r.vertices.get(i) + " = " +
+                            r.distances.get(i));
+        }
+    }
+
+    public static void exampleD2() {
+        System.out.println("\n\nEXAMPLE D2: Dijkstra's Algorithm Shortest Path (Undirected & Weighted)");
+
+        Integer[] vertices = { 0, 1, 2, 3 };
+        // List of Edge objects for graph
+        int[][] edges = new int[][] {
+                { 0, 1, 5 }, { 0, 2, 8 }, { 1, 2, 9 }, { 1, 3, 2 }, { 2, 3, 6 }
+        };
+
+        GenericGraph<Integer> graph = new GenericGraph<>(false, true, vertices, edges);
+        GenericGraph.DijkstraResult<Integer> r = graph.dijkstra(0);
+
+        for (int i = 0; i < r.vertices.size(); i++) {
+            System.out.println(
+                    "Distance from 0 to " +
+                            r.vertices.get(i) + " = " +
+                            r.distances.get(i));
+        }
+    }
+
+    public static void exampleD3() {
+        System.out.println("\n\nEXAMPLE D3: Dijkstra's Algorithm Shortest Path (Undirected & Weighted)");
+
+        Integer[] vertices = { 0, 1, 2, 3 };
+        // List of Edge objects for graph
+        int[][] edges = new int[][] {
+                { 0, 1, 5 }, { 0, 2, 8 }, { 1, 2, 10 }, { 1, 3, 15 }, { 2, 3, 20 }
+        };
+
+        GenericGraph<Integer> graph = new GenericGraph<>(false, true, vertices, edges);
+        GenericGraph.DijkstraResult<Integer> r = graph.dijkstra(0);
+
+        for (int i = 0; i < r.vertices.size(); i++) {
+            System.out.println(
+                    "Distance from 0 to " +
+                            r.vertices.get(i) + " = " +
+                            r.distances.get(i));
+        }
+    }
+
+    public static void exampleD4() {
+
+        System.out.println("\n\nEXAMPLE D4: Shortest Shortest Path (Undirected & Weighted)\n");
+        String[] vertices = { "Seattle", "San Francisco", "Los Angeles",
+                "Denver", "Kansas City", "Chicago", "Boston", "New York",
+                "Atlanta", "Miami", "Dallas", "Houston" };
+
+        int[][] edges = {
+                { 0, 1, 807 }, { 0, 3, 1331 }, { 0, 5, 2097 },
+                { 1, 2, 381 }, { 1, 3, 1267 },
+                { 2, 3, 1015 }, { 2, 4, 1663 }, { 2, 10, 1435 },
+                { 3, 1, 1267 }, { 3, 4, 599 }, { 3, 5, 1003 },
+                { 4, 5, 533 }, { 4, 7, 1260 }, { 4, 8, 864 }, { 4, 10, 496 },
+                { 5, 6, 983 }, { 5, 7, 787 },
+                { 6, 7, 214 },
+                { 7, 8, 888 },
+                { 8, 9, 661 }, { 8, 10, 781 }, { 8, 11, 810 },
+                { 9, 11, 1187 },
+                { 10, 11, 239 }
+        };
+
+        String startVertex = "Kansas City";
+        GenericGraph<String> graph1 = new GenericGraph<>(false, true, vertices, edges);
+        GenericGraph.DijkstraResult<String> r = graph1.dijkstra(startVertex);
+
+        for (int i = 0; i < r.vertices.size(); i++) {
+            String dest = r.vertices.get(i);
+            System.out.println(
+                    "Distance from " + startVertex + " to " +
+                            r.vertices.get(i) +
+                            r.getPathTo(dest) +
+                            " = " + r.distances.get(i));
+        }
+
+    }
+
+    public static void exampleD5() {
+        System.out.println("\n\nEXAMPLE D5: Weighted Graph: Dijkstra's Shortest Path (Undirected & Weighted)\n");
+
+        Integer[] vertices = { 0, 1, 2, 3, 4 };
+
+        int[][] edges = new int[][] {
+                { 0, 1, 2 }, { 0, 3, 8 },
+                { 1, 2, 7 }, { 1, 3, 3 },
+                { 2, 3, 4 }, { 2, 4, 5 },
+                { 3, 4, 6 }
+        };
+        GenericGraph<Integer> graph2 = new GenericGraph<>(false, true, vertices, edges);
+        GenericGraph.DijkstraResult<Integer> r = graph2.dijkstra(3);
+
+        for (int i = 0; i < r.vertices.size(); i++) {
+            System.out.println(
+                    "Distance from 3 to " +
+                            r.vertices.get(i) + " = " +
+                            r.distances.get(i));
+        }
+    }
+
+    public static void exampleP1() {
+        System.out.println("\n\nEXAMPLE P1: Prims: Minimum Spanning Tree (Undirected & Weighted)\n");
+        Integer[] vertices2 = { 0, 1, 2, 3, 4, 5 };
+
+        int[][] edges = new int[][] {
+                { 0, 1, 6 }, { 0, 2, 1 }, { 0, 3, 5 },
+                { 1, 2, 5 }, { 1, 4, 3 },
+                { 2, 3, 5 }, { 2, 4, 6 }, { 2, 5, 4 },
+                { 3, 5, 2 }, { 4, 5, 5 }
+        };
+
+        GenericGraph<Integer> graph2 = new GenericGraph<>(false, true, vertices2, edges);
+        GenericGraph.PrimResult<Integer> pr2 = graph2.prim(0);
+        System.out.println("Total weight is " + pr2.getTotalWeight());
+        for (GenericGraph.Edge e : pr2.getMstEdges())
+            System.out.println(e.getFrom() + "->" + e.getTo() + " w=" + e.getWeight());
+    }
+
+    public static void exampleP2() {
+        System.out.println("\n\nEXAMPLE P2: Prims: Minimum Spanning Tree (Undirected & Weighted)\n");
+
+        Integer[] vertices = { 0, 1, 2, 3, 4 };
+        int[][] edges = new int[][] {
+                { 0, 1, 10 }, { 0, 3, 30 }, { 0, 4, 100 },
+                { 1, 2, 50 }, { 2, 4, 10 }, { 3, 2, 20 }, { 3, 4, 60 }
+        };
+
+        GenericGraph<Integer> graph = new GenericGraph<>(false, true, vertices, edges);
+        GenericGraph.PrimResult<Integer> pr3 = graph.prim(0);
+        System.out.println("Total weight is " + pr3.getTotalWeight());
+        for (GenericGraph.Edge e : pr3.getMstEdges())
+            System.out.println(e.getFrom() + "->" + e.getTo() + " w=" + e.getWeight());
+
+    }
+
+    public static void exampleP3() {
+        System.out.println("\n\nEXAMPLE P3: Prims: Minimum Spanning Tree (Undirected & Weighted)\n");
+
+        Integer[] vertices3 = { 0, 1, 2, 3, 4, 5, 6 };
+        // List of Edge objects for graph
+        int[][] edges = new int[][] {
+                { 0, 1, 5 }, { 0, 5, 5 },
+                { 1, 2, 10 }, { 1, 5, 2 }, { 1, 6, 7 },
+                { 2, 3, 8 }, { 2, 4, 10 }, { 2, 6, 7 },
+                { 3, 4, 8 }, { 4, 5, 2 }, { 4, 6, 7 }, { 5, 6, 7 },
+        };
+
+        GenericGraph<Integer> graph3 = new GenericGraph<>(false, true, vertices3, edges);
+        GenericGraph.PrimResult<Integer> pr3 = graph3.prim(0);
+        System.out.println("Total weight is " + pr3.getTotalWeight());
+        for (GenericGraph.Edge e : pr3.getMstEdges())
+            System.out.println(e.getFrom() + "->" + e.getTo() + " w=" + e.getWeight());
+
+    }
+
+    public static void exampleP4() {
+        System.out.println("\n\nEXAMPLE P4: Prims: Minimum Spanning Tree (Directed & Weighted)\n");
+
+        Integer[] vertices3 = { 0, 1, 2, 3 };
+        // List of Edge objects for graph
+        int[][] edges = new int[][] {
+                { 0, 1, 5 }, { 0, 2, 8 },
+                { 1, 2, 10 }, { 1, 3, 15 }, { 2, 3, 20 }
+        };
+
+        GenericGraph<Integer> graph3 = new GenericGraph<>(false, true, vertices3, edges);
+        GenericGraph.PrimResult<Integer> pr3 = graph3.prim(0);
+        System.out.println("Total weight is " + pr3.getTotalWeight());
+        for (GenericGraph.Edge e : pr3.getMstEdges())
+            System.out.println(e.getFrom() + "->" + e.getTo() + " w=" + e.getWeight());
+
+    }
+
+    public static void exampleP5() {
+        System.out.println("\n\nEXAMPLE P5: Prims: Minimum Spanning Tree (Undirected & Weighted)\n");
+        Integer[] vertices2 = { 0, 1, 2, 3, 4 };
+
+        int[][] edges = new int[][] {
+                { 0, 1, 2 }, { 0, 3, 8 },
+                { 1, 0, 2 }, { 1, 2, 7 }, { 1, 3, 3 },
+                { 2, 1, 7 }, { 2, 3, 4 }, { 2, 4, 5 },
+                { 3, 0, 8 }, { 3, 1, 3 }, { 3, 2, 4 }, { 3, 4, 6 },
+                { 4, 2, 5 }, { 4, 3, 6 }
+        };
+
+        GenericGraph<Integer> graph2 = new GenericGraph<>(false, true, vertices2, edges);
+        GenericGraph.PrimResult<Integer> pr2 = graph2.prim(1);
+        System.out.println("Total weight is " + pr2.getTotalWeight());
+        for (GenericGraph.Edge e : pr2.getMstEdges())
+            System.out.println(e.getFrom() + "->" + e.getTo() + " w=" + e.getWeight());
+    }
+
+    public static void exampleP6() {
+
+        System.out.println("\n\nEXAMPLE P6: Prims: Minimum Spanning Tree (Undirected & Weighted)\n");
+        Integer[] vertices4 = { 0, 1, 2, 3, 4 };
+
+        int[][] edges = new int[][] {
+                { 0, 1, 2 }, { 0, 3, 6 },
+                { 1, 2, 3 }, { 1, 3, 8 }, { 1, 4, 5 },
+                { 2, 4, 7 }, { 3, 4, 9 }
+        };
+
+        GenericGraph<Integer> graph4 = new GenericGraph<>(false, true, vertices4, edges);
+        GenericGraph.PrimResult<Integer> pr4 = graph4.prim(1);
+        System.out.println("Total weight is " + pr4.getTotalWeight());
+        for (GenericGraph.Edge e : pr4.getMstEdges())
+            System.out.println(e.getFrom() + "->" + e.getTo() + " w=" + e.getWeight());
+    }
+
+    public static void exampleP7() {
+
+        System.out.println("\n\nEXAMPLE P7: Prims: Minimum Spanning Tree (Undirected & Weighted)\n");
+        String[] vertices = { "Seattle", "San Francisco", "Los Angeles",
+                "Denver", "Kansas City", "Chicago", "Boston", "New York",
+                "Atlanta", "Miami", "Dallas", "Houston" };
+
+        int[][] edges = {
+                { 0, 1, 807 }, { 0, 3, 1331 }, { 0, 5, 2097 },
+                { 1, 0, 807 }, { 1, 2, 381 }, { 1, 3, 1267 },
+                { 2, 1, 381 }, { 2, 3, 1015 }, { 2, 4, 1663 }, { 2, 10, 1435 },
+                { 3, 0, 1331 }, { 3, 1, 1267 }, { 3, 2, 1015 }, { 3, 4, 599 },
+                { 3, 5, 1003 },
+                { 4, 2, 1663 }, { 4, 3, 599 }, { 4, 5, 533 }, { 4, 7, 1260 },
+                { 4, 8, 864 }, { 4, 10, 496 },
+                { 5, 0, 2097 }, { 5, 3, 1003 }, { 5, 4, 533 },
+                { 5, 6, 983 }, { 5, 7, 787 },
+                { 6, 5, 983 }, { 6, 7, 214 },
+                { 7, 4, 1260 }, { 7, 5, 787 }, { 7, 6, 214 }, { 7, 8, 888 },
+                { 8, 4, 864 }, { 8, 7, 888 }, { 8, 9, 661 },
+                { 8, 10, 781 }, { 8, 11, 810 },
+                { 9, 8, 661 }, { 9, 11, 1187 },
+                { 10, 2, 1435 }, { 10, 4, 496 }, { 10, 8, 781 }, { 10, 11, 239 },
+                { 11, 8, 810 }, { 11, 9, 1187 }, { 11, 10, 239 }
+        };
+
+        GenericGraph<String> graph1 = new GenericGraph<>(false, true, vertices, edges);
+
+        GenericGraph.PrimResult<String> pr = graph1.prim("Seattle");
+        System.out.println("Total weight is " + pr.getTotalWeight());
+        for (GenericGraph.Edge e : pr.getMstEdges())
+            System.out.println(e.getFrom() + "->" + e.getTo() + " w=" + e.getWeight());
+
+    }
+
 }

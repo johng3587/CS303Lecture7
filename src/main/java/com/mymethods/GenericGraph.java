@@ -251,7 +251,7 @@ public class GenericGraph<V> extends AbstractGraph<V> {
         public final List<V> visitOrder = new ArrayList<>();
         public final List<V> finishOrder = new ArrayList<>();
         public final List<V> topologicalOrder = new ArrayList<>();
-        boolean isCyclic;
+        public boolean isCyclic;
 
         public DFSOrder() {
             boolean isCyclic = false;
@@ -429,9 +429,9 @@ public class GenericGraph<V> extends AbstractGraph<V> {
         }
 
         //getters
-        V getFrom() { return from; }
-        V getTo()   { return to; }
-        double getWeight() { return weight; }
+        public V getFrom() { return from; }
+        public V getTo()   { return to; }
+        public double getWeight() { return weight; }
         
         //definition of how to compare Edges
         @Override
