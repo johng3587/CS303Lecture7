@@ -47,7 +47,7 @@ public class HuffmanTree implements Comparable<HuffmanTree> {
 
     public static HuffmanTree getHuffmanTree(int[] counts) {
         // Create a heap to hold huffman trees
-        MyHeap<HuffmanTree> heap = new MyHeap<>();
+        MyHeap<HuffmanTree> heap = new MyHeap<>(false);
 
         // Add leaf nodes (where ascii count > 0) to the tree
         for (int i = 0; i < counts.length; i++) {
@@ -142,13 +142,13 @@ public class HuffmanTree implements Comparable<HuffmanTree> {
         StringBuilder sb = new StringBuilder();
         HuffmanNode marker = root;
         for (char c : text.toCharArray()) {
+            if (c == '0') marker = marker.left;
+            if (c == '1') marker = marker.right;
+
             if (marker.right == null && marker.left == null) {
                 sb.append(marker.element);
                 marker = root;
             }
-            // Not sure it matters what order you do checking and moving.
-            if (c == '0') marker = marker.left;
-            if (c == '1') marker = marker.right;
         }
         return sb.toString();
     }

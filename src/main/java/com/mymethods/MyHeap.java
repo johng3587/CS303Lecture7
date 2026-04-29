@@ -9,20 +9,9 @@ public class MyHeap<E extends Comparable<E>> {
     private MyArrayList<E> myHeap = new MyArrayList<E>();
     private boolean max;
 
-    // default to max heap
-    public MyHeap() {
-        max = true;
-    }
-
     // Set value of max to 'b' -
     public MyHeap(boolean b) {
         max = b;
-    }
-
-    public MyHeap(E[] objList) {
-        max = true;
-        for (int i = 0; i < objList.length; i++)
-            add(objList[i]);
     }
 
     public MyHeap(E[] objList, boolean b) {
