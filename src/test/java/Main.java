@@ -41,7 +41,7 @@ public class Main {
         Functions.exampleD4();
         Functions.exampleD5();
                 
-        System.out.println("\n\nTESTING PRIM'S ALGORITHM\n");
+        /* System.out.println("\n\nTESTING PRIM'S ALGORITHM\n");
  
         Functions.exampleP1();
         Functions.exampleP2();
@@ -49,7 +49,7 @@ public class Main {
         Functions.exampleP4();
         Functions.exampleP5();
         Functions.exampleP6();
-        Functions.exampleP7();
+        Functions.exampleP7(); */
  
     }
 }
